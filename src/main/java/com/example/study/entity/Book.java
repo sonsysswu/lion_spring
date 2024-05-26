@@ -15,6 +15,7 @@ import lombok.*;
    @GeneratedValue(strategy = GenerationType.IDENTITY) // 아이디 생성을 db에 권한 위임
    private Long id;
 
+
    @Column(name="name")
    private String name;
 
