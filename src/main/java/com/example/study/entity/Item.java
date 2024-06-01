@@ -22,6 +22,6 @@ public class Item {
    private String description;
 
    @Column(name="startingPrice")
-   private String startingPrice;
+   private long startingPrice;
 
 }

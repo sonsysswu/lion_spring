@@ -6,10 +6,11 @@ import com.example.study.repository.BookRepository;
 import com.example.study.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,15 +24,30 @@ public class BookController {
       this.bookRepository= bookRepository;
    }
 
-   @GetMapping("/book")
-   public List<Book> getBooks(){
-      List<Book> books = bookRepository.findAll();
-      return books;
-   }
+//   @GetMapping("/book")
+//   public List<Book> getBooks(){
+//      List<Book> books = bookRepository.findAll();
+//      return books;
+//   }
 
    @PostMapping("/book")
    public long addBook(@RequestBody @Valid AddBookInput input){ //@Valid: 요청을 보내면 validation 수행.
       long id = bookService.addBook(input);
       return id;
+   }
+
+   @PutMapping("/book/{id}")
+   public void updateBook(
+           @PathVariable long id,
+           @RequestBody AddBookInput input
+   ){
+      bookService.updateBook(id,input);
+   }
+
+   @GetMapping("/book")
+   public ResponseEntity<Page<Book>> getBooks (@PageableDefault Pageable pageable){ //@PageableDefault 자동으로 페이징 처리
+      return ResponseEntity.ok(
+              bookService.getBooks(pageable)
+      );
    }
 }
